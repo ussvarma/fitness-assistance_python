@@ -1,0 +1,60 @@
+<html>
+    <head>
+    <title>Light_workout</title>
+        <meta charset="UTF-8">
+        <meta name="keywords" content="Important words">
+        <meta name="description" content="short description">
+        <meta name="author" content="Aishwarya">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="static/Homepage.css">
+        <link rel="icon" href="/static/Home-images/logo image.jpg">
+    </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <body>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="/capture" >Capture Face</a>
+        <a href="/logout" >Logout</a>
+    </div>
+    <p style="text-align:left;font-size:20px;cursor:pointer;margin:10px" onclick="openNav()">&#9776; settings</p>
+
+    <section class="suggested_exercises" >
+        <h3>Light workout</h3><br><br>
+<!--        <a class="btn btn-info" id="bicep" >Watch Demo</a><br><br>-->
+        <a class="btn btn-info"  href="/biceps">Watch Demo</a><br><br>
+        <div id="iframeHolder" ></div>
+    </section>
+    <a href="/ipcam" class="btn btn-info" onclick="instructions()">Try the Exercise</a>
+    <br><br>
+    {% if counter %}
+        <p class=counter> Biceps count = {{  counter }}</p>
+    {% endif %}
+    <script>
+        function openNav() {
+          document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeNav() {
+          document.getElementById("mySidenav").style.width = "0";
+        }
+        function instructions() {
+          alert(`INSTRUCTIONS! \n \
+             1. Please watch demo video first \n \
+             2. Make sure that your cam captures entire body \n \
+             3. Correctly done excercise are only counted, count will be visible at top left corner \n \
+              HAVE A NICE DAY`);
+        }
+    </script>
+
+    </body>
+</html>
+
+<!--    <script>-->
+<!--    $(function(){-->
+<!--        $('#bicep').click(function(){-->
+<!--            $('#iframeHolder').html('<iframe id="iframe" src="static/sample_videos/biceps.mp4" width="500" height="350"></iframe>');-->
+<!--        });-->
+<!--    });-->
+<!--    </script>-->

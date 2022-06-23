@@ -1,0 +1,45 @@
+<html>
+    <head>
+    <title>Exercise</title>
+        <meta charset="UTF-8">
+        <meta name="keywords" content="Important words">
+        <meta name="description" content="short description">
+        <meta name="author" content="Aishwarya">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="static/Homepage.css">
+        <link rel="icon" href="/static/Home-images/logo image.jpg">
+    </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+
+    $(function(){
+        $('#push_up').click(function(){
+            $('#iframeHolder').html('<iframe id="iframe" src="static/sample_videos/pushup.mp4" width="500" height="350"></iframe>');
+        });
+
+        $('#bicep').click(function(){
+            $('#iframeHolder').html('<iframe id="iframe" src="static/sample_videos/biceps.mp4" width="500" height="350"></iframe>');
+        });
+
+        $('#squat').click(function(){
+            $('#iframeHolder').html('<iframe id="iframe" src="static/sample_videos/squat.mp4" width="500" height="350"></iframe>');
+        });
+    });
+
+
+    </script>
+    <body>
+
+    <section class="suggested_exercises" >
+<!--        style="text-align:left"-->
+        <h3>Sample videos</h3><br><br>
+        <a class="btn btn-info" id="push_up" href="/push_up">Try Push-up</a><br><br>
+        <a class="btn btn-info" id="bicep" href="/biceps">Try Biceps</a><br><br>
+        <a class="btn btn-info" id="squat" href="/squat">Try Squats</a><br><br>
+        <div id="iframeHolder" ></div>
+        <p>{{count}}</p>
+    </section>
+
+    </body>
+</html>

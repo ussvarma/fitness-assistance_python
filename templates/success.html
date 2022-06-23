@@ -9,59 +9,64 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="static/Homepage.css">
         <link rel="icon" href="/static/Home-images/logo image.jpg">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     </head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script>
-    $(document).ready(function(){
-      $("#submit").click(function(){
-        event.preventDefault()
-        $('.food_intake').hide();
-        $(".suggested_exercises").fadeIn("slow")
-      });
-    });
 
-    $(function(){
-        $('#push_up').click(function(){
-            $('#iframeHolder').html('<iframe id="iframe" src="static/sample_videos/pushup.mp4" width="500" height="350"></iframe>');
-        });
-
-        $('#bicep').click(function(){
-            $('#iframeHolder').html('<iframe id="iframe" src="static/sample_videos/biceps.mp4" width="500" height="350"></iframe>');
-        });
-
-        $('#squat').click(function(){
-            $('#iframeHolder').html('<iframe id="iframe" src="static/sample_videos/squat.mp4" width="500" height="350"></iframe>');
-        });
-    });
-
-
-    </script>
     <body>
+
     <section class="food_intake">
-        <h3 class="username">Hi welcome..!</h3>
-        <form>
-            <br><br>
-            How much water did you drink?<br><br>
-            <input type = 'water' name = 'water'>
-            <br><br>
-            <input class="btn btn-default" type = "submit" value = "Submit" id="submit">
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="/capture" >Capture Face</a>
+            <a href="/logout" >Logout</a>
+        </div>
+        <p style="text-align:left;font-size:20px;cursor:pointer;margin:15px" onclick="openNav()">&#9776; settings</p>
+
+        <h3 class="username">Hi welcome…!</h3>
+         <form method = "post"  id="foodintake">
+             <label for="meals">How many meals per day?</label><br><br>
+             <input type="text" id="meals" name="meals" required><br><br>
+             <label for="water">How much water did you drink?</label><br><br>
+             <input type="text" id="water" name="water" required><br><br>
         </form>
-        <a class="btn btn-default" name = 'face' href="/capture">Capture Face</a>
+        <button class="btn btn-info" id="tryit">Next</button>
+        <br><br>
         {% if status %}
             <p class=status><strong>status:</strong> {{ status }}
         {% endif %}
     </section>
+    <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+    }
 
-    <section class="suggested_exercises" hidden="hidden" style="text-align:left">
-        <h3>Sample videos</h3><br><br>
-        <a class="btn btn-info" id="push_up" href="/push_up">Try Push-up</a><br><br>
-        <a class="btn btn-info" href="/biceps" id="bicep">Try Biceps</a><br><br>
-        <a class="btn btn-info" id="squat" href="/squat">Try Squats</a><br><br>
-        <div id="iframeHolder" ></div>
-        <p>{{count}}</p>
-    </section>
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+    </script>
+    <script>
+        document.getElementById("tryit").addEventListener("click",myFunction);
+
+        function myFunction(){
+        var x = document.getElementById("foodintake").elements[0].value
+        var y = document.getElementById("foodintake").elements[1].value
 
 
+        if (x<=3 && y<=3){
+          window.location.href="/light_workout";
+        }
+
+        else if (x<=5 && y<=5){
+          window.location.href="/medium_workout";
+        }
+
+        else{
+          window.location.href="/heavy_workout";
+        }
+        }
+
+    </script>
 
     </body>
 </html>

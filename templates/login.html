@@ -11,14 +11,16 @@
         <link rel="icon" href="/static/Home-images/logo image.jpg">
 </head>
 <body>
+    <br><br>
+    <p>{{msg}}</p>
     <div class="row">
         <div class="column" >
             <h3>Login with password</h3>
             <br><br>
             <form method = 'POST' action = '/check'>
-                <input type = 'name' name = 'name' placeholder="Name">
+                <input type = 'text' name = 'username' placeholder="Username" required>
                 <br><br>
-                <input type = 'password' name = 'password' placeholder="password">
+                <input type = 'password' name = 'password' placeholder="password" required>
                 <br><br>
                 <input class="btn btn-info" type = "submit" value = "Submit">
             </form>
@@ -27,7 +29,10 @@
         <div class="column" >
             <h3>Face Login</h3>
             <a class="btn btn-info" href="/face">Login with face</a>
-
+            <br><br>
+            {% if status %}
+                <p class=status> {{ status }}</p>
+            {% endif %}
         </div>
     </div>
 

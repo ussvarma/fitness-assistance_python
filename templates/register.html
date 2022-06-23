@@ -13,10 +13,12 @@
 <body>
 <h3>Registration Form</h3><br><br>
     <form method = "post" action='/add'>
-        <input type = 'text' name = 'name' placeholder="Name"><br><br>
-        <input type = 'number' name = 'height' placeholder="Height in cm"><br><br>
-        <input type = 'password' name = 'password' placeholder="Password"><br><br>
+        <input type = 'text' name = 'name' placeholder="Name" required><br><br>
+        <input type = 'text' name = 'username' placeholder="Username" required><br><br>
+        <input type = 'number' name = 'height' placeholder="Height in cm" required><br><br>
+        <input type = 'password' name = 'password' placeholder="Password" required><br><br>
         <input class="btn btn-info" type = "submit" value = "Submit">
     </form>
+    <p>{{msg}}</p>
 </body>
 </html>
