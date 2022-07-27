@@ -1,0 +1,90 @@
+<html>
+    <head>
+    <title>Success</title>
+        <meta charset="UTF-8">
+        <meta name="keywords" content="Important words">
+        <meta name="description" content="short description">
+        <meta name="author" content="Aishwarya">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="static/Homepage.css">
+        <link rel="icon" href="/static/Home-images/logo image.jpg">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    </head>
+
+    <body>
+
+    <section class="food_intake">
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="/capture" >Capture Face</a>
+            <a href="/logout" >Logout</a>
+        </div>
+        <p style="text-align:left;font-size:20px;cursor:pointer;margin:15px" onclick="openNav()">&#9776; settings</p>
+
+        <h3 class="username">Hi welcome…!</h3>
+         <form method = "post"  id="foodintake">
+             <label for="meals">How many meals per day?</label><br><br>
+                <select name="meals" id="meals">
+                  <option value=1>1</option>
+                  <option value=2>2</option>
+                  <option value=3>3</option>
+                  <option value=4>4</option>
+                  <option value=5>5</option>
+                  <option value=6>6</option>
+                  <option value=7>7</option>
+                </select>
+                <br><br>
+             <label for="water">No of  water did you drink?</label><br><br>
+             <select name="water" id="water">
+                  <option value=1>1</option>
+                  <option value=2>2</option>
+                  <option value=3>3</option>
+                  <option value=4>4</option>
+                  <option value=5>5</option>
+                  <option value=6>6</option>
+                  <option value=7>7</option>
+                </select>
+         <br><br>
+        </form>
+        <button class="btn btn-info" id="tryit">Next</button>
+        <br><br>
+        {% if status %}
+            <p class=status><strong>status:</strong> {{ status }}
+        {% endif %}
+    </section>
+    <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+    </script>
+    <script>
+        document.getElementById("tryit").addEventListener("click",myFunction);
+
+        function myFunction(){
+        var x = document.getElementById("foodintake").elements[0].value
+        var y = document.getElementById("foodintake").elements[1].value
+
+
+        if (x<=3 && y<=3){
+          window.location.href="/light_workout";
+        }
+
+        else if (x<=5 && y<=5){
+          window.location.href="/medium_workout";
+        }
+
+        else{
+          window.location.href="/heavy_workout";
+        }
+        }
+
+    </script>
+
+    </body>
+</html>
