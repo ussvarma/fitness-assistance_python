@@ -4,12 +4,21 @@
         <meta charset="UTF-8">
         <meta name="keywords" content="Important words">
         <meta name="description" content="short description">
-        <meta name="author" content="Aishwarya">
+        <meta name="author" content="Ussvarma">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="static/Homepage.css">
         <link rel="icon" href="/static/Home-images/logo image.jpg">
+
+
 </head>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+        crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+        <script type="text/javascript" charset="utf-8"></script>
 <body>
     <br><br>
     <p>{{msg}}</p>
@@ -28,7 +37,9 @@
 
         <div class="column" >
             <h3>Face Login</h3>
-            <a class="btn btn-info" href="/face">Login with face</a>
+            <a class="btn btn-info"  id="face">Login with face</a>
+            <br>
+            <img id="img">
             <br><br>
             {% if status %}
                 <p class=status> {{ status }}</p>
@@ -38,6 +49,27 @@
 
     <section id="login-section">
     </section>
-
+     <script type="text/javascript" charset="utf-8">
+        $( document ).ready(function() {
+          var socket = io();
+          socket.on('connect', function(){
+            socket.send("connected")
+            });
+          socket.on('disconnect', function(){
+            socket.send("disconnected")
+            });
+          socket.on('redirect', function (data) {
+            window.location = data.url;
+            console.log(data.url)
+            });
+          socket.on('message', function(data){
+            $("#img").attr("src",data.image_data)
+            });
+          $("#face").click(function(){
+            console.log("click function activated")
+            socket.emit("face","sent data")
+          })
+        })
+       </script>
 </body>
 </html>

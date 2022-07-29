@@ -1,0 +1,103 @@
+<html>
+<head>
+    <title>login</title>
+        <meta charset="UTF-8">
+        <meta name="keywords" content="Important words">
+        <meta name="description" content="short description">
+        <meta name="author" content="Aishwarya">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="static/Homepage.css">
+        <link rel="icon" href="/static/Home-images/logo image.jpg">
+</head>
+ <body>
+ <section>
+     <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="/capture" >Capture Face</a>
+            <a href="/logout" >Logout</a>
+     </div>
+        <p style="text-align:left;font-size:20px;cursor:pointer;margin:15px" onclick="openNav()">&#9776; settings</p>
+ </section>
+  <div id="basic" style="text-align:center;">
+	  <video class="videostream" autoplay="" controls></video>
+      <canvas id="snapshot" width=320 height=240></canvas>
+      <br>
+      <button class="capture-button btn btn-info">Start camera</button>
+	  <button class="btn btn-info" id="capture">Capture</button>
+      <button class="btn btn-info" id="send">save</button>
+
+  </div>
+  <p id="success"></p>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+    crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+     (function() {
+
+	  const video = document.querySelector('#basic video');
+	  const audio = document.querySelector('#basic audio');
+
+	  const captureVideoButton = document.querySelector('#basic .capture-button');
+	  const stopVideoButton = document.querySelector('#basic #stop-button');
+	  const capturephoto = document.querySelector('#basic #capture');
+	  const displaypic = document.querySelector('#basic #snapshot');
+
+	  //Capture Video
+	  captureVideoButton.onclick = function() {
+	     navigator.mediaDevices.getUserMedia({
+	      audio: false,
+	      video: true
+	    })
+	    .then(stream => {
+	      window.localStream = stream;
+	      video.srcObject = stream;
+	    })
+	    .catch((err) => {
+	      console.log(err);
+	    });
+	  };
+
+	  capturephoto.onclick = function() {
+	    var context = snapshot.getContext('2d');
+	    // Draw the video frame to the canvas.
+
+	    console.log(context);
+	    context.drawImage(video, 0, 0, displaypic.width,displaypic.height);
+	    console.log(context.canvas.toDataURL("image/jpeg",0.5));
+	    var imgAsDataURL = context.canvas.toDataURL("image/jpeg")
+	    localStream.getVideoTracks()[0].stop();
+	    video.src = '';
+	    $( document ).ready(function() {
+           var socket = io();
+              socket.on('connect', function(){
+                socket.send("connected")
+                });
+              socket.on('disconnect', function(){
+                socket.send("disconnected")
+                });
+              $("#send").click(function(){
+              socket.emit("capture",imgAsDataURL)
+                $( "#success" ).text("successfully saved");
+              console.log("sending to server")
+                })
+               socket.on('redirect', function (data) {
+                 window.location.href=data.url
+                console.log(data.url)
+                });
+        })
+	  };
+    })()
+    </script>
+    <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+    </script>
+  </body>
+</html>

@@ -18,9 +18,11 @@
         }
     </style>
     <body>
-    <p> Take Rest </p>
-    <p id ="rest"> </p>
-    <img id="img">
+      <div id="resting">
+        <p> Take Rest </p>
+        <p id ="rest"> </p>
+      </div>
+      <img id="img">
     <script>
     var countDown = {{timer}};
     var counter = `{{counter}}`
@@ -38,13 +40,14 @@
           var socket = io();
           socket.on('connect', function(){
             socket.send("timer connected")
+            $("#resting").hide()
             socket.emit(counter,"squats")
           });
           socket.on('disconnect', function(){
             socket.send("timer disconnected")
           });
           socket.on('capture_2', function(data){
-            $("#img").attr("src",data.image_data)
+            $("#img").attr("src",data.base_64)
           });
           socket.on('redirect', function (data) {
              window.location.href=data.url

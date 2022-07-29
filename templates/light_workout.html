@@ -20,7 +20,7 @@
     </div>
     <p style="text-align:left;font-size:20px;cursor:pointer;margin:10px" onclick="openNav()">&#9776; settings</p>
 
-    <section class="suggested_exercises" >
+    <section class="suggested_exercises" id="exercise-section">
         <h2>Light workout</h2><br><br>
         <div id="iframeHolder" ></div>
         <div class="box">
@@ -33,17 +33,6 @@
                 </div>
                 <div class="inner-container-button"><a class="btn btn-info"   id="bicep" style="height:35px">Watch Bicep</a></div>
             </div>
-
-            <div class="container">
-                <img src="https://image.shutterstock.com/image-vector/woman-doing-wide-push-ups-600w-1993802285.jpg" style="height:150px">
-                <div class="inner-container">
-                    <h4 style="color:black"> PUSH UPS </h4>
-                    <h5 style="color:black"> X 10 </h5>
-                    <p style="color:black"> 2 min </p>
-                </div>
-                <div class="inner-container-button"><a class="btn btn-info"   id="pushup" style="height:35px">Watch pushup</a></div>
-            </div>
-
             <div class="container">
                 <img src="https://image.shutterstock.com/image-vector/man-doing-air-squat-2-600w-1830755837.jpg" style="height:150px">
                 <div class="inner-container">
@@ -54,9 +43,9 @@
                 <div class="inner-container-button"><a class="btn btn-info"  id="squat" style="height:35px">Watch squat</a></div>
             </div>
         </div>
+        <a id="exercise" class="btn btn-info" onclick="instructions()">Try the Exercise</a>
     </section>
-    <a id="exercise" class="btn btn-info" onclick="instructions()">Try the Exercise</a>
-    <br><br>
+<br><br>
     <img id="img">
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
@@ -83,9 +72,6 @@
          $('#bicep').click(function(){
             $('#iframeHolder').html('<iframe id="iframeHolder" src="static/sample_videos/biceps.mp4" width="500" height="350"></iframe>');
         });
-        $('#pushup').click(function(){
-            $('#iframeHolder').html('<iframe id="iframeHolder" src="static/sample_videos/pushup.mp4" width="500" height="350"></iframe>');
-        });
         $('#squat').click(function(){
             $('#iframeHolder').html('<iframe id="iframeHolder" src="static/sample_videos/squat.mp4" width="500" height="350"></iframe>');
         });
@@ -100,13 +86,14 @@
             socket.send("disconnected")
           });
           socket.on('capture_2', function(data){
-            $("#img").attr("src",data.image_data)
+            $("#img").attr("src",data.base_64)
           });
           socket.on('redirect', function (data) {
              window.location.href=data.url
             console.log(data.url)
             });
           $("#exercise").click(function(){
+            $("#exercise-section").hide()
             socket.emit("light_biceps","sending")
             console.log("sending to server")
           })

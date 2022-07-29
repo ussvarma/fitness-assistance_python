@@ -26,15 +26,35 @@
     </div>
     <p style="text-align:left;font-size:20px;cursor:pointer;margin:10px" onclick="openNav()">&#9776; settings</p>
 
-
-    <section class="suggested_exercises" >
-        <h3>Heavy workout</h3><br><br>
-<!--        <a class="btn btn-info" id="squat" >Watch Demo</a><br><br>-->
-        <a class="btn btn-info" href="/squat">Watch Demo</a><br><br>
+    <section class="suggested_exercises" id="exercise-section">
+        <h2>Heavy workout</h2><br><br>
         <div id="iframeHolder" ></div>
+        <div class="box">
+            <div class="container">
+                <img src="https://image.shutterstock.com/image-vector/man-doing-standing-dumbbell-bicep-600w-1850250391.jpg" style="height:150px">
+                <div class="inner-container">
+                    <h4 style="color:black"> BICEPS </h4>
+                    <h5 style="color:black"> X 20  </h5>
+                    <p style="color:black"> 6 min </p>
+                </div>
+                <div class="inner-container-button"><a class="btn btn-info"   id="bicep" style="height:35px">Watch Bicep</a></div>
+            </div>
+
+            <div class="container">
+                <img src="https://image.shutterstock.com/image-vector/woman-doing-wide-push-ups-600w-1993802285.jpg" style="height:150px">
+                <div class="inner-container">
+                    <h4 style="color:black"> PUSH UPS </h4>
+                    <h5 style="color:black"> X 20 </h5>
+                    <p style="color:black"> 8 min </p>
+                </div>
+                <div class="inner-container-button"><a class="btn btn-info"   id="pushup" style="height:35px">Watch pushup</a></div>
+            </div>
+        </div>
+        <a id="exercise" class="btn btn-info" onclick="instructions()">Try the Exercise</a>
     </section>
-    <a href="/ipcam_squat" class="btn btn-info" onclick="instructions()">Try the Exercise</a>
+
     <br><br>
+    <img id="img">
     {% if counter %}
         <p class=counter> squats count = {{ counter }}</p>
     {% endif %}
@@ -53,6 +73,37 @@
              3. Correctly done excercise are only counted, count will be visible at top left corner \n \
               HAVE A NICE DAY`);
         }
+    </script>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+    crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script type="text/javascript">
+         $( document ).ready(function() {
+          var socket = io();
+          socket.on('connect', function(){
+            socket.send("connected")
+          });
+          socket.on('disconnect', function(){
+            socket.send("disconnected")
+          });
+          socket.on('capture_2', function(data){
+            $("#img").attr("src",data.base_64)
+          });
+          socket.on('redirect', function (data) {
+             window.location.href=data.url
+            console.log(data.url)
+            });
+          $("#exercise").click(function(){
+            $("#exercise-section").hide()
+            socket.emit("heavy_biceps","sending")
+            console.log("sending to server")
+          })
+      })
+
     </script>
 
     </body>
