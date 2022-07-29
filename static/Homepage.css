@@ -82,8 +82,7 @@ margin-left: 50px;
 .box {
 display: flex;
 flex-direction: column;
-justify-content: space-between;
-height: 500px;
+height: 400px;
 margin-bottom:50px;
 }
 
@@ -98,7 +97,6 @@ margin-top:15px;
 padding-left:10px;
 padding-right:10px;
 }
-
 .inner-container {
 display: flex;
 flex-direction: column;
