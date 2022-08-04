@@ -120,7 +120,7 @@ def biceps():
 
             # Render curl counter
             # Setup status box
-            cv2.rectangle(image, (0, 0), (225, 73), (245, 117, 16), -1)
+            cv2.rectangle(image, (0, 0), (100, 73), (245, 117, 16), -1)
 
             # Rep data
             cv2.putText(image, 'REPS', (15, 12),
@@ -136,7 +136,7 @@ def biceps():
                                       mp_drawing.DrawingSpec(color=(245, 66, 230), thickness=2, circle_radius=2)
                                       )
 
-            image_data = cv2.resize(image, (720, 360))
+            image_data = image
             # converting frames into bytes
             image_data = cv2.imencode('image_data.jpg', image_data)[1].tobytes()
             base_64_encoded = base64.b64encode(image_data).decode('utf-8')

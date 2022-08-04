@@ -228,11 +228,12 @@ def biceps(data):
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://127.0.0.1:7000")
-    cap = cv2.VideoCapture("http://192.168.29.172:8080/video")
+    cap = cv2.VideoCapture(0)  #"http://192.168.29.149:8080/video"
     while cap.isOpened():
         try:
             ret, im0 = cap.read()
-            im0_small = cv2.resize(im0.copy(), (480, 360))
+            im0_small = cv2.resize(im0,(720,480))
+            print("shape:",im0_small.shape)
             im0_small = cv2.imencode('.jpg', im0_small)[1].tobytes()
             base_64_encoded = base64.b64encode(im0_small).decode('utf-8')
             str_img_base_64 = "data:image/jpeg;base64,{}".format(base_64_encoded)
@@ -436,7 +437,7 @@ def squat(data):
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://127.0.0.1:7001")
-    cap = cv2.VideoCapture("http://192.168.29.172:8080/video")
+    cap = cv2.VideoCapture(0)  #"http://192.168.29.149:8080/video"
     while cap.isOpened():
         try:
             ret, im0 = cap.read()
@@ -570,4 +571,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, use_reloader=False)
+    socketio.run(app, debug=True, use_reloader=False,host='192.168.29.20')
