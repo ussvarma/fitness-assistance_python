@@ -1,75 +1,75 @@
+<!DOCTYPE html>
 <html>
+
 <head>
-    <title>login</title>
-        <meta charset="UTF-8">
-        <meta name="keywords" content="Important words">
-        <meta name="description" content="short description">
-        <meta name="author" content="Ussvarma">
-        <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="static/Homepage.css">
-        <link rel="icon" href="/static/Home-images/logo image.jpg">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="static/Homepage.css">
 
-
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+    crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script type="text/javascript" charset="utf-8"></script>
 </head>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
-        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
-        crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-        <script type="text/javascript" charset="utf-8"></script>
-<body>
-    <br><br>
-    <p>{{msg}}</p>
-    <div class="row">
-        <div class="column" >
-            <h3>Login with password</h3>
-            <br><br>
-            <form method = 'POST' action = '/check'>
-                <input type = 'text' name = 'username' placeholder="Username" required>
-                <br><br>
-                <input type = 'password' name = 'password' placeholder="password" required>
-                <br><br>
-                <input class="btn btn-info" type = "submit" value = "Submit">
-            </form>
-        </div>
+  <body>
+      <br><br>
+      <p>{{msg}}</p>
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-lg-6 col-md-12" >
+                  <h3>Login with password</h3>
+                  <br><br>
+                  <form method = 'POST' action = '/check'>
+                      <input type = 'text' name = 'username' placeholder="Username" required>
+                      <br><br>
+                      <input type = 'password' name = 'password' placeholder="password" required>
+                      <br><br>
+                      <input class="btn btn-info" type = "submit" value = "Submit">
+                      <br><br>
+                  </form>
+              </div>
+              
+              <div class="col-lg-6 col-md-12" >
+                  <h3>Face Login</h3>
+                  <a class="btn btn-info"  id="face">Login with face</a>
+                  <br>
+                  <img id="img">
+                  <br><br>
+                  {% if status %}
+                      <p class=status> {{ status }}</p>
+                  {% endif %}
+              </div>
+          </div>
+      </div>
 
-        <div class="column" >
-            <h3>Face Login</h3>
-            <a class="btn btn-info"  id="face">Login with face</a>
-            <br>
-            <img id="img">
-            <br><br>
-            {% if status %}
-                <p class=status> {{ status }}</p>
-            {% endif %}
-        </div>
-    </div>
-
-    <section id="login-section">
-    </section>
-     <script type="text/javascript" charset="utf-8">
-        $( document ).ready(function() {
-          var socket = io();
-          socket.on('connect', function(){
-            socket.send("connected")
-            });
-          socket.on('disconnect', function(){
-            socket.send("disconnected")
-            });
-          socket.on('redirect', function (data) {
-            window.location = data.url;
-            console.log(data.url)
-            });
-          socket.on('message', function(data){
-            $("#img").attr("src",data.image_data)
-            });
-          $("#face").click(function(){
-            console.log("click function activated")
-            socket.emit("face","sent data")
+      <section id="login-section">
+      </section>
+      <script type="text/javascript" charset="utf-8">
+          $( document ).ready(function() {
+            var socket = io();
+            socket.on('connect', function(){
+              socket.send("connected")
+              });
+            socket.on('disconnect', function(){
+              socket.send("disconnected")
+              });
+            socket.on('redirect', function (data) {
+              window.location = data.url;
+              console.log(data.url)
+              });
+            socket.on('message', function(data){
+              $("#img").attr("src",data.image_data)
+              });
+            $("#face").click(function(){
+              console.log("click function activated")
+              socket.emit("face","sent data")
+            })
           })
-        })
-       </script>
-</body>
+        </script>
+  </body>
 </html>

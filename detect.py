@@ -68,7 +68,7 @@ def biceps():
                 left_ankle_visibility = landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].visibility
                 right_ankle_visibility = landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].visibility
 
-                if (left_ankle_visibility < 0.70) or (right_ankle_visibility < 0.70):
+                if (left_ankle_visibility < 0.50) or (right_ankle_visibility < 0.50):
                     print(left_ankle_visibility)
                     cv2.putText(image, str("please go back"),
                                 (200, 50),
@@ -182,7 +182,7 @@ def squats():
                 landmarks = results.pose_landmarks.landmark
                 left_ankle_visibility = landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].visibility
                 right_ankle_visibility = landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].visibility
-                if (left_ankle_visibility < 0.70) or (right_ankle_visibility < 0.70):
+                if (left_ankle_visibility < 0.50) or (right_ankle_visibility < 0.50):
                     print(left_ankle_visibility)
                     cv2.putText(image, str("please go back"),
                                 (200, 50),
@@ -221,7 +221,7 @@ def squats():
 
             # Render curl counter
             # Setup status box
-            cv2.rectangle(image, (0, 0), (225, 73), (245, 117, 16), -1)
+            cv2.rectangle(image, (0, 0), (200, 73), (245, 117, 16), -1)
 
             # Rep data
             cv2.putText(image, 'REPS', (15, 12),
@@ -375,7 +375,269 @@ def pushup():
             socket.send_pyobj(obj)
 
 
+def lunges():
+    context = zmq.Context()
+    socket = context.socket(zmq.REP)
+    socket.bind("tcp://*:7003")
+    stage = None
+    counter = 0
+    # Setup mediapipe instance
+
+    with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+        while True:
+            #  receiving the frame as bytes
+            message = socket.recv_string()
+
+            # converting bytes into image numpy array
+            header, data = message.split(',', 1)
+            image_data = base64.b64decode(data)
+            np_array = np.frombuffer(image_data, np.uint8)
+            # print(' array:', np_array[:2])
+            image = cv2.imdecode(np_array, cv2.IMREAD_UNCHANGED)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            image.flags.writeable = False
+
+            # Make detection
+            results = pose.process(image)
+
+            # Recolor back to BGR
+            image.flags.writeable = True
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            # image = cv2.resize(image, (700, 450))
+
+
+            try:
+                landmarks = results.pose_landmarks.landmark
+                left_ankle_visibility=landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].visibility
+                right_ankle_visibility=landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].visibility
+                if (left_ankle_visibility <0.50) and (right_ankle_visibility <0.50) :
+                    print(right_ankle_visibility)
+                    
+                    cv2.putText(image, str("please go back"), 
+                                                (200,50), 
+                                                cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,0), 2, cv2.LINE_AA)
+                            
+                else:
+                    
+                    # Get coordinates
+                    left_hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+                    left_knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
+                    left_ankle = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
+        
+                    # Calculate angle
+                    left_knee_angle = calculate_angle(left_hip, left_knee, left_ankle)
+            
+                    
+                    right_hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
+                    right_knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
+                    right_ankle = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
+                
+                    right_knee_angle = calculate_angle(right_hip, right_knee, right_ankle)
+
+                    # print(right_knee_angle)
+                    # Visualize angle
+                    cv2.putText(image, str(left_knee_angle), 
+                                tuple(np.multiply(left_knee, [960, 640]).astype(int)), 
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA
+                                        )
+                    cv2.putText(image, str(right_knee_angle), 
+                                tuple(np.multiply(right_knee, [960, 640]).astype(int)), 
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA
+                                        )
+                    
+                    # Curl counter logic
+                    if left_knee_angle > 170 and right_knee_angle > 170:
+                        stage = "up"
+                        print(left_knee_angle,right_knee_angle)
+                    if left_knee_angle < 90 and stage =='up' and right_knee_angle <90 :
+                        stage="down"
+                        counter +=1
+                        print(counter)
+
+            except:
+                pass
+            
+            # Render curl counter
+            # Setup status box
+            cv2.rectangle(image, (0,0), (225,73), (245,117,16), -1)
+            
+            # Rep data
+            cv2.putText(image, 'REPS', (15,12), 
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
+            cv2.putText(image, str(counter), 
+                        (10,60), 
+                        cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 2, cv2.LINE_AA)
+            
+            # Stage data
+            cv2.putText(image, 'STAGE', (65,12), 
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
+            cv2.putText(image, stage, 
+                        (60,60), 
+                        cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 2, cv2.LINE_AA)
+            
+            
+            # Render detections
+            mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
+                                    mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
+                                    mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
+                                    )  
+
+            image_data = cv2.resize(image, (720, 360))
+            # converting frames into bytes
+            image_data = cv2.imencode('image_data.jpg', image_data)[1].tobytes()
+            base_64_encoded = base64.b64encode(image_data).decode('utf-8')
+            image_data = "data:image/jpeg;base64,{}".format(base_64_encoded)
+            obj = {"image_data": image_data, "counter": counter}
+            # sending image in bytes form to app.py
+            socket.send_pyobj(obj)
+
+
+def short_head_biceps():
+    context = zmq.Context()
+    socket = context.socket(zmq.REP)
+    socket.bind("tcp://*:7004")
+    stage = None
+    counter = 0
+    # Setup mediapipe instance
+
+    with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+        while True:
+            #  receiving the frame as bytes
+            message = socket.recv_string()
+
+            # converting bytes into image numpy array
+            header, data = message.split(',', 1)
+            image_data = base64.b64decode(data)
+            np_array = np.frombuffer(image_data, np.uint8)
+            # print(' array:', np_array[:2])
+            image = cv2.imdecode(np_array, cv2.IMREAD_UNCHANGED)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            image.flags.writeable = False
+
+            # Make detection
+            results = pose.process(image)
+
+            # Recolor back to BGR
+            image.flags.writeable = True
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            # image = cv2.resize(image, (700, 450))
+
+            # Extract landmarks
+            try:
+                landmarks = results.pose_landmarks.landmark
+                left_ankle_visibility = landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].visibility
+                right_ankle_visibility = landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].visibility
+                if False:
+                    (left_ankle_visibility < 0.70) or (right_ankle_visibility < 0.70)
+                    # print(left_ankle_visibility)
+                    cv2.putText(image, str("please go back"),
+                                (200, 50),
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
+
+                else:
+
+                    # Get coordinates for elbow
+                    shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
+                                landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+                    elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,
+                             landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
+                    wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,
+                             landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
+
+                    # print(shoulder,elbow,wrist)
+                    # Calculate angle
+                    angle = calculate_angle(shoulder, elbow, wrist)
+
+                    # Visualize angle
+                    cv2.putText(image, str(angle),
+                                tuple(np.multiply(elbow, [960, 640]).astype(int)),
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA
+                                )
+
+                    # for knee
+                    hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
+                           landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+                    knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,
+                            landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
+                    ankle = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,
+                             landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
+                    # print(hip,knee,ankle)
+                    # Calculate angle
+                    knee_angle = calculate_angle(hip, knee, ankle)
+                    # print(landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].visibility)
+                    # print(knee_angle)
+                    # Visualize angle
+                    cv2.putText(image, str(knee_angle),
+                                tuple(np.multiply(knee, [image.shape[1], image.shape[0]]).astype(int)),
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA
+                                )
+                    # for hip angle
+                    shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
+                                landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+
+                    hip_angle = calculate_angle(shoulder, hip, knee)
+                    shoulder_angle = calculate_angle(hip, shoulder, elbow)
+                    cv2.putText(image, str(shoulder_angle),
+                                tuple(np.multiply(shoulder, [960, 640]).astype(int)),
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA
+                                )
+                    # print(shoulder_angle)
+                    cv2.putText(image, str(hip_angle),
+                                tuple(np.multiply(hip, [960, 640]).astype(int)),
+                                cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 0, 255), 5, cv2.LINE_AA
+                                )
+                    if hip_angle < 165:
+                        cv2.putText(image, str("Stand straight"),
+                                    (200, 50),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 2, cv2.LINE_AA)
+
+                    # print(hip_angle)
+                    # Curl counter logic
+                    # print(angle)
+                    if (angle > 110 and knee_angle > 160 and shoulder_angle > 70):
+                        # print(angle)
+                        stage = "down"
+                    else:
+                        cv2.putText(image, 'Lift up properly', (15, 12),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+                    if angle < 90 and stage == 'down' and knee_angle > 160 and shoulder_angle > 70:
+                        stage = "up"
+                        counter += 1
+
+            except:
+                pass
+
+            # Render curl counter
+            # Setup status box
+            cv2.rectangle(image, (0, 0), (100, 73), (245, 117, 16), -1)
+
+            # Rep data
+            cv2.putText(image, 'REPS', (15, 12),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+            cv2.putText(image, str(counter),
+                        (10, 60),
+                        cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)
+
+            # Render detections
+            mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
+                                      mp_drawing.DrawingSpec(color=(245, 117, 66), thickness=2,
+                                                             circle_radius=2),
+                                      mp_drawing.DrawingSpec(color=(245, 66, 230), thickness=2, circle_radius=2)
+                                      )
+
+            image_data = image
+            # converting frames into bytes
+            image_data = cv2.imencode('image_data.jpg', image_data)[1].tobytes()
+            base_64_encoded = base64.b64encode(image_data).decode('utf-8')
+            image_data = "data:image/jpeg;base64,{}".format(base_64_encoded)
+            obj = {"image_data": image_data, "counter": counter}
+            # sending image in bytes form to app.py
+            socket.send_pyobj(obj)
+
 if __name__ == "__main__":
     threading.Thread(target=biceps).start()
     threading.Thread(target=squats).start()
     threading.Thread(target=pushup).start()
+    threading.Thread(target=lunges).start()
+    threading.Thread(target=short_head_biceps).start()
+

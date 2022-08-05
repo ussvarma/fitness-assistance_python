@@ -1,105 +1,103 @@
+<!DOCTYPE HTML>
 <html>
     <head>
     <title>Light_workout</title>
-        <meta charset="UTF-8">
-        <meta name="keywords" content="Important words">
-        <meta name="description" content="short description">
-        <meta name="author" content="Aishwarya">
-        <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="static/Homepage.css">
-        <link rel="icon" href="/static/Home-images/logo image.jpg">
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="static/Homepage.css">
     </head>
     <body>
-    <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="/capture" >Capture Face</a>
-        <a href="/logout" >Logout</a>
-    </div>
-    <p style="text-align:left;font-size:20px;cursor:pointer;margin:10px" onclick="openNav()">&#9776; settings</p>
-
-    <section class="suggested_exercises" id="exercise-section">
-        <h2>Light workout</h2><br><br>
-        <div id="iframeHolder" ></div>
-        <div class="box">
-            <div class="container">
-                <img src="https://image.shutterstock.com/image-vector/man-doing-standing-dumbbell-bicep-600w-1850250391.jpg" style="height:150px">
-                <div class="inner-container">
-                    <h4 style="color:black"> BICEPS </h4>
-                    <h5 style="color:black"> X 12  </h5>
-                    <p style="color:black"> 2 min </p>
-                </div>
-                <div class="inner-container-button"><a class="btn btn-info"   id="bicep" style="height:35px">Watch Bicep</a></div>
-            </div>
-            <div class="container">
-                <img src="https://image.shutterstock.com/image-vector/man-doing-air-squat-2-600w-1830755837.jpg" style="height:150px">
-                <div class="inner-container">
-                    <h4 style="color:black"> SQUATS </h4>
-                    <h5 style="color:black"> X 12  </h5>
-                    <p style="color:black"> 2 min </p>
-                </div>
-                <div class="inner-container-button"><a class="btn btn-info"  id="squat" style="height:35px">Watch squat</a></div>
-            </div>
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="/capture" >Capture Face</a>
+            <a href="/logout" >Logout</a>
         </div>
-        <a id="exercise" class="btn btn-info" onclick="instructions()">Try the Exercise</a>
-    </section>
-<br><br>
-    <img id="img">
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
-    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
-    crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script type="text/javascript">
-        function openNav() {
-          document.getElementById("mySidenav").style.width = "250px";
-        }
+        <p style="text-align:left;font-size:20px;cursor:pointer;margin:10px" onclick="openNav()">&#9776; settings</p>
 
-        function closeNav() {
-          document.getElementById("mySidenav").style.width = "0";
-        }
-        function instructions() {
-          alert(`INSTRUCTIONS! \n \
-             1. Please watch demo video first \n \
-             2. Make sure that your cam captures entire body \n \
-             3. Correctly done exercise are only counted, count will be visible at top left corner \n \
-              HAVE A NICE DAY`);
-        }
-         $('#bicep').click(function(){
-            $('#iframeHolder').html('<iframe id="iframeHolder" src="static/sample_videos/biceps.mp4" width="500" height="350"></iframe>');
-        });
-        $('#squat').click(function(){
-            $('#iframeHolder').html('<iframe id="iframeHolder" src="static/sample_videos/squat.mp4" width="500" height="350"></iframe>');
-        });
-        </script>
+        <section class="suggested_exercises" id="exercise-section">
+            <h2>Light workout</h2>
+            <br><br>
+            <div id="iframeHolder"></div>
+            <div class="d-flex flex-column" style="align-items:center">
+                <div class="card d-flex flex-row justify-content-center">
+                    <div><img src="https://image.shutterstock.com/image-vector/man-doing-standing-dumbbell-bicep-600w-1850250391.jpg" style="height:150px"></div>
+                    <div class="d-flex flex-column justify-content-center">
+                        <h4 style="color:black">  BICEPS  </h4>
+                        <h5 style="color:black"> X 12  </h5>
+                        <p style="color:black"> 2 min </p>
+                    </div>
+                        <div><a class=" inner-container-button btn btn-info mt-5"   id="bicep" style="height:35px">Watch Bicep</a></div>
+                </div>    
+                        
+                <div class="card d-flex flex-row justify-content-center">
+                    <div><img src="https://image.shutterstock.com/image-vector/man-doing-air-squat-2-600w-1830755837.jpg" style="height:150px"></div>
+                    <div class="inner-container d-flex flex-column justify-content-center">
+                        <h4 style="color:black"> SQUATS </h4>
+                        <h5 style="color:black"> X 12  </h5>
+                        <p style="color:black"> 2 min </p>
+                    </div>
+                    <div class="inner-container-button mt-5" ><a class="btn btn-info"  id="squat" style="height:35px">Watch squat</a></div>
+                </div>
+            </div>
+            <a id="exercise" class="btn btn-info" onclick="instructions()">Try the Exercise</a>
+        </section>
+        <br><br>
+        <img id="img">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+        crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
         <script type="text/javascript">
-         $( document ).ready(function() {
-          var socket = io();
-          socket.on('connect', function(){
-            socket.send("connected")
+          function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+          }
+        
+          function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+          }
+          function instructions() {
+            alert(`INSTRUCTIONS! \n \
+                1. Please watch demo video first \n \
+                2. Make sure that your cam captures entire body \n \
+                3. Correctly done exercise are only counted, count will be visible at top left corner \n \
+                HAVE A NICE DAY`);
+          }
+            $('#bicep').click(function(){
+              $('#iframeHolder').html('<iframe id="iframeHolder" src="static/sample_videos/biceps.mp4" width="500" height="350"></iframe>');
           });
-          socket.on('disconnect', function(){
-            socket.send("disconnected")
+          $('#squat').click(function(){
+              $('#iframeHolder').html('<iframe id="iframeHolder" src="static/sample_videos/squat.mp4" width="500" height="350"></iframe>');
           });
-          socket.on('capture_2', function(data){
-            $("#img").attr("src",data.base_64)
-          });
-          socket.on('redirect', function (data) {
-             window.location.href=data.url
-            console.log(data.url)
+          </script>
+          <script type="text/javascript">
+            $( document ).ready(function() {
+            var socket = io();
+            socket.on('connect', function(){
+              socket.send("connected")
             });
-          $("#exercise").click(function(){
-            $("#exercise-section").hide()
-            socket.emit("light_biceps","sending")
-            console.log("sending to server")
-          })
-      })
-
-    </script>
+            socket.on('disconnect', function(){
+              socket.send("disconnected")
+            });
+            socket.on('capture_2', function(data){
+              $("#img").attr("src",data.base_64)
+            });
+            socket.on('redirect', function (data) {
+                window.location.href=data.url
+              console.log(data.url)
+              });
+            $("#exercise").click(function(){
+              $("#exercise-section").hide()
+              socket.emit("light_biceps","sending")
+              console.log("sending to server")
+            })
+        })
+        
+        </script>
     </body>
 </html>
 

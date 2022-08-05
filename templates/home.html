@@ -1,28 +1,33 @@
+<!DOCTYPE html>
 <html>
-    <head>
-    <title>Fitness Assistant Home Page</title>
-        <meta charset="UTF-8">
-        <meta name="keywords" content="Important words">
-        <meta name="description" content="short description">
-        <meta name="author" content="Aishwarya">
-        <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="static/Homepage.css">
-        <link rel="icon" href="/static/Home-images/logo image.jpg">
-    </head>
+
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="static/Homepage.css">
+</head>
     <body>
         <br>
-        <section id="home">
-            <h3>Track Your Fitness</h3>
-            <img src="https://www.pngkey.com/png/full/218-2184167_fitness-cartoon-png-image-download-exercising-cartoon-images.png"  width="300" height="500">
+        <h3>Track Your Fitness</h3>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <section id="home">
+                        <img src="https://www.pngkey.com/png/full/218-2184167_fitness-cartoon-png-image-download-exercising-cartoon-images.png"  width="300" height="500">
+                    
+                        <br>
 
-            <br>
-
-            <section id="register-login">
-                <a class="btn btn-info" id="register" href='/register' onclick="register()">REGISTER</a>
-                <a class="btn btn-info" id="login" href='/login'>LOGIN</a>
-            </section>
-        </section>
+                        <section id="register-login">
+                            <a class="btn btn-info" id="register" href='/register' onclick="register()">REGISTER</a>
+                            <a class="btn btn-info" id="login" href='/login'>LOGIN</a>
+                        </section>
+                    </section>
+                </div>
+            </div>
+        </div>
         <script>
         function register() {
           alert("INSTRUCTION! After registration , please click on settings and then register your face for face login..! ");
