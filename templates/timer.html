@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="keywords" content="Important words">
         <meta name="description" content="short description">
-        <meta name="author" content="Aishwarya">
+        <meta name="author" content="ussv">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="static/Homepage.css">
@@ -16,13 +16,23 @@
           font-size: 60px;
           margin-top: 0px;
         }
+        @media only screen and (max-width: 1000px) {
+          #img{
+            height:700px;
+            width: 360px;
+
+          }
+          }
+
     </style>
     <body>
       <div id="resting">
         <p> Take Rest </p>
         <p id ="rest"> </p>
       </div>
-      <img id="img">
+
+      <img id="img"  style="align-items:center; display:None" >
+
     <script>
     var countDown = {{timer}};
     var counter = `{{counter}}`
@@ -41,6 +51,7 @@
           socket.on('connect', function(){
             socket.send("timer connected")
             $("#resting").hide()
+            $("#img").show()
             socket.emit(counter,"squats")
           });
           socket.on('disconnect', function(){

@@ -38,7 +38,7 @@
                   <h3>Face Login</h3>
                   <a class="btn btn-info"  id="face">Login with face</a>
                   <br>
-                  <img id="img">
+                  <img id="login_img">
                   <br><br>
                   {% if status %}
                       <p class=status> {{ status }}</p>
@@ -63,7 +63,7 @@
               console.log(data.url)
               });
             socket.on('message', function(data){
-              $("#img").attr("src",data.image_data)
+              $("#login_img").attr("src",data.image_data)
               });
             $("#face").click(function(){
               console.log("click function activated")

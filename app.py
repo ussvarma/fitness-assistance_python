@@ -230,7 +230,7 @@ def biceps(data):
     while cap.isOpened():
         try:
             ret, im0 = cap.read()
-            im0_small = cv2.resize(im0, (720, 480))
+            im0_small = im0
             print("shape:", im0_small.shape)
             im0_small = cv2.imencode('.jpg', im0_small)[1].tobytes()
             base_64_encoded = base64.b64encode(im0_small).decode('utf-8')
@@ -242,7 +242,7 @@ def biceps(data):
             message = socket.recv_pyobj()
             counter = message["counter"]
             video = {"base_64": message["image_data"]}
-            if counter == 5:
+            if counter == 0:
                 break
             # emitting frame as bytes into html page
             emit("capture_2", video)
@@ -254,15 +254,15 @@ def biceps(data):
 
 
 @socketio.on('medium_lunges')
-def biceps(data):
+def lunges(data):
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://127.0.0.1:7003")
-    cap = cv2.VideoCapture("static/sample_videos/lunge_1.mp4")  # "http://192.168.29.149:8080/video"
+    cap = cv2.VideoCapture("static/sample_videos/lunge_1.mp4")  # "http://192.168.29.149:8080//video"
     while cap.isOpened():
         try:
             ret, im0 = cap.read()
-            im0_small = cv2.resize(im0, (720, 480))
+            im0_small = im0
             print("shape:", im0_small.shape)
             im0_small = cv2.imencode('.jpg', im0_small)[1].tobytes()
             base_64_encoded = base64.b64encode(im0_small).decode('utf-8')
@@ -300,7 +300,7 @@ def heavy_short_head_biceps(data):
     while cap.isOpened():
         try:
             ret, im0 = cap.read()
-            im0_small = cv2.resize(im0.copy(), (480, 360))
+            im0_small = cv2.resize(im0, (1080, 1920))
             im0_small = cv2.imencode('.jpg', im0_small)[1].tobytes()
             base_64_encoded = base64.b64encode(im0_small).decode('utf-8')
             str_img_base_64 = "data:image/jpeg;base64,{}".format(base_64_encoded)
@@ -350,7 +350,8 @@ def squat(data):
     while cap.isOpened():
         try:
             ret, im0 = cap.read()
-            im0_small = cv2.resize(im0.copy(), (480, 360))
+            im0_small = im0
+            print(im0_small.shape)
             im0_small = cv2.imencode('.jpg', im0_small)[1].tobytes()
             base_64_encoded = base64.b64encode(im0_small).decode('utf-8')
             str_img_base_64 = "data:image/jpeg;base64,{}".format(base_64_encoded)
@@ -480,4 +481,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, use_reloader=False, host='192.168.29.20')  # '192.168.29.20'
+    socketio.run(app, debug=True, use_reloader=False,host='192.168.29.20')  # '192.168.29.20'
