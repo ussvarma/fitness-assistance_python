@@ -61,3 +61,13 @@ STEP 7: Gives the option to watch the demo of exercise.
 STEP 8: If you finish watching the demo , click on Try the exercise. Your camera will open. Before proceeding to exercise make sure your body is completely visible in the camera , make sure nobody is moving around /in front of the camera.
 
 IP WEBCAM : User has to install an IP webcam in his mobile, with this app the user can track his exercise with his mobile camera which is linked to the Fitness webapp.
+
+Quick Install:
+### step-1:
+    git clone https://github.com/ussvarma/fitness-assistance.git
+### step-2:
+    python detect.py
+### step-3:
+    python app.py
+    
+
