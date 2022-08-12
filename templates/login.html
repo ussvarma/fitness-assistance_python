@@ -18,7 +18,7 @@
 </head>
   <body>
       <br><br>
-      <p>{{msg}}</p>
+      <p></p>
       <div class="container-fluid">
           <div class="row">
               <div class="col-lg-6 col-md-12" >
@@ -60,7 +60,9 @@
               });
             socket.on('redirect', function (data) {
               window.location = data.url;
-              console.log(data.url)
+              var status=data.status
+              console.log(status)
+               $("p").text(status);
               });
             socket.on('message', function(data){
               $("#login_img").attr("src",data.image_data)

@@ -13,17 +13,21 @@ import numpy as np
 import zmq
 import psycopg2
 from time import sleep
+from flask_session import Session
+import pandas as pd
+import json
+import plotly
+import plotly.express as px
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
-tracker = None
-status = None
-
 app = Flask(__name__)
-socketio = SocketIO(app)
+app.config['SESSION_TYPE'] = 'filesystem'
 
-app.secret_key = "ussv"
+# app.secret_key = "usshfdhv"
+Session(app)
+socketio = SocketIO(app)
 
 
 # Connect to your PostgresSQL database on a remote server
@@ -150,7 +154,7 @@ def face(data):
 
         known_name_encodings.append(encoding)
         known_names.append(os.path.splitext(os.path.basename(image_path))[0].lower())
-        cap = cv2.VideoCapture(0) #"http://192.168.29.149:8080/video"
+        cap = cv2.VideoCapture(0)  # "http://192.168.29.149:8080/video"
         if cap.isOpened:
             while True:
                 ret, frame = cap.read()
@@ -185,7 +189,7 @@ def face(data):
                     else:
                         status = "Couldn't recognise please login with password"
                         cap.release()
-                        emit('redirect', {'url': url_for('login')})
+                        emit('redirect', {"status": status})
 
 
 @app.route('/success')
@@ -226,7 +230,7 @@ def biceps(data):
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://127.0.0.1:7000")
-    cap = cv2.VideoCapture("http://192.168.29.149:8080/video")  # "http://192.168.29.149:8080/video"
+    cap = cv2.VideoCapture("static/sample_videos/biceps.mp4")  # "http://192.168.29.149:8080/video"
     while cap.isOpened():
         try:
             ret, im0 = cap.read()
@@ -242,7 +246,7 @@ def biceps(data):
             message = socket.recv_pyobj()
             counter = message["counter"]
             video = {"base_64": message["image_data"]}
-            if counter == 0:
+            if counter == 2:
                 break
             # emitting frame as bytes into html page
             emit("capture_2", video)
@@ -480,5 +484,44 @@ def logout():
     return render_template("home.html")
 
 
+@app.route('/chart1')
+def chart1():
+    print("hello")
+    df = pd.DataFrame({
+        "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
+        "Amount": [4, 1, 2, 2, 4, 5],
+        "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
+    })
+
+    fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
+
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    header = "Fruit in North America"
+    description = """
+    A academic study of the number of apples, oranges and bananas in the cities of
+    San Francisco and Montreal would probably not come up with this chart.
+    """
+    return render_template('chart.html', graphJSON=graphJSON, header=header, description=description)
+
+
+@app.route('/chart2')
+def chart2():
+    df = pd.DataFrame({
+        "Vegetables": ["Lettuce", "Cauliflower", "Carrots", "Lettuce", "Cauliflower", "Carrots"],
+        "Amount": [10, 15, 8, 5, 14, 25],
+        "City": ["London", "London", "London", "Madrid", "Madrid", "Madrid"]
+    })
+
+    fig = px.bar(df, x="Vegetables", y="Amount", color="City", barmode="stack")
+
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    header = "Vegetables in Europe"
+    description = """
+    The rumor that vegetarians are having a hard time in London and Madrid can probably not be
+    explained by this chart.
+    """
+    return render_template('chart.html', graphJSON=graphJSON, header=header, description=description)
+
+
 if __name__ == '__main__':
-    socketio.run(app, debug=True, use_reloader=False,host='192.168.29.20')  # '192.168.29.20'
+    socketio.run(app, debug=True, use_reloader=False, host='192.168.29.20')  # '192.168.29.20'
