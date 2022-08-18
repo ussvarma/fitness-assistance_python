@@ -68,7 +68,7 @@ def biceps():
                 left_ankle_visibility = landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].visibility
                 right_ankle_visibility = landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].visibility
 
-                if (left_ankle_visibility < 0.50) or (right_ankle_visibility < 0.50):   # (left_ankle_visibility < 0.50) or (right_ankle_visibility < 0.50)
+                if False:   # (left_ankle_visibility < 0.50) or (right_ankle_visibility < 0.50)
                     print(left_ankle_visibility)
                     cv2.putText(image, str("please go back"),
                                 (200, 50),
