@@ -73,6 +73,7 @@ def check():
             dt = datetime.now()
             login_date_time = dt
             print(login_date_time)
+            print(name)
             cur.execute('INSERT INTO  user_logindetails(username,login) VALUES(%s,%s) ', (name, dt,))
             conn.commit()
             # conn.close()
@@ -160,7 +161,7 @@ def face(data):
 
         known_name_encodings.append(encoding)
         known_names.append(os.path.splitext(os.path.basename(image_path))[0].lower())
-        cap = cv2.VideoCapture("http://192.168.29.172:8080/video")  # "http://192.168.29.172:8080/video"
+        cap = cv2.VideoCapture(0)  # "http://192.168.29.149:8080/video"
         if cap.isOpened:
             while True:
                 ret, frame = cap.read()
@@ -187,6 +188,7 @@ def face(data):
                         cap.release()
                         dt = datetime.now()
                         login_date_time = dt
+                        print(login_date_time)
                         cur.execute('INSERT INTO  user_logindetails(username,login) VALUES(%s,%s) ', (name, dt,))
                         conn.commit()
                         emit('redirect', {'url': url_for('success')})
@@ -234,10 +236,11 @@ def food_intake():
 def biceps(data):
     global name, login_date_time
     print(name)
+    print(login_date_time)
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://127.0.0.1:7000")
-    cap = cv2.VideoCapture("http://192.168.29.172:8080/video")  # "http://192.168.29.172:8080/video"
+    cap = cv2.VideoCapture("static/sample_videos/biceps.mp4")  # "http://192.168.29.149:8080/video"
     start_time = datetime.now()  # 12:33
     # name = session["username"]
     cur, conn = connections()
@@ -258,20 +261,20 @@ def biceps(data):
             video = {"base_64": message["image_data"]}
             print(login_date_time)
             print(name)
-            if counter == 2:
-                # end_time = datetime.now()
-                # diff = end_time - start_time
-                # duration = diff.total_seconds() / 60
-                # sql_query = """select weight from details WHERE username=%s"""
-                # cur.execute(sql_query, (name,))
-                # weight = int(cur.fetchone()[0])
-                # calories = 3.5 * 3 * weight * duration / 200
-                # print(calories)
-                #
-                # sql_query = """UPDATE user_logindetails SET biceps=%s WHERE login=%s and username=%s"""
-                # cur.execute(sql_query, (calories, login_date_time, name))
-                # conn.commit()
-                # conn.close()
+            if counter == 3:
+                end_time = datetime.now()
+                diff = end_time - start_time
+                duration = diff.total_seconds() / 60
+                sql_query = """select weight from details WHERE username=%s"""
+                cur.execute(sql_query, (name,))
+                weight = int(cur.fetchone()[0])
+                calories = 3.5 * 3 * weight * duration / 200
+                print(calories)
+
+                sql_query = """UPDATE user_logindetails SET biceps=%s WHERE login=%s and username=%s"""
+                cur.execute(sql_query, (calories, login_date_time, name))
+                conn.commit()
+                conn.close()
                 break
             # emitting frame as bytes into html page
             emit("capture_2", video)
@@ -287,7 +290,10 @@ def lunges(data):
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://127.0.0.1:7003")
-    cap = cv2.VideoCapture("http://192.168.29.172:8080/video")  # "http://192.168.29.149:8080//video"
+    cap = cv2.VideoCapture("static/sample_videos/lunge_1.mp4")  # "http://192.168.29.149:8080//video"
+    start_time = datetime.now()  # 12:33
+    # name = session["username"]
+    cur, conn = connections()
     while cap.isOpened():
         try:
             ret, im0 = cap.read()
@@ -304,6 +310,19 @@ def lunges(data):
             counter = message["counter"]
             video = {"base_64": message["image_data"]}
             if counter == 3:
+                end_time = datetime.now()
+                diff = end_time - start_time
+                duration = diff.total_seconds() / 60
+                sql_query = """select weight from details WHERE username=%s"""
+                cur.execute(sql_query, (name,))
+                weight = int(cur.fetchone()[0])
+                calories = 3.5 * 5 * weight * duration / 200
+                print(calories)
+
+                sql_query = """UPDATE user_logindetails SET lunges=%s WHERE login=%s and username=%s"""
+                cur.execute(sql_query, (calories, login_date_time, name))
+                conn.commit()
+                conn.close()
                 break
             # emitting frame as bytes into html page
             emit("capture_2", video)
@@ -319,11 +338,14 @@ def heavy_short_head_biceps(data):
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://127.0.0.1:7004")
-    cap = cv2.VideoCapture("http://192.168.29.172:8080/video")
+    cap = cv2.VideoCapture("static/sample_videos/short head biceps.mp4")
+    start_time = datetime.now()  # 12:33
+    # name = session["username"]
+    cur, conn = connections()
     while cap.isOpened():
         try:
             ret, im0 = cap.read()
-            im0_small = cv2.resize(im0, (1080, 1920))
+            im0_small = cv2.resize(im0, (720, 360))
             im0_small = cv2.imencode('.jpg', im0_small)[1].tobytes()
             base_64_encoded = base64.b64encode(im0_small).decode('utf-8')
             str_img_base_64 = "data:image/jpeg;base64,{}".format(base_64_encoded)
@@ -334,7 +356,20 @@ def heavy_short_head_biceps(data):
             message = socket.recv_pyobj()
             counter = message["counter"]
             video = {"base_64": message["image_data"]}
-            if counter == 2:
+            if counter == 4:
+                end_time = datetime.now()
+                diff = end_time - start_time
+                duration = diff.total_seconds() / 60
+                sql_query = """select weight from details WHERE username=%s"""
+                cur.execute(sql_query, (name,))
+                weight = int(cur.fetchone()[0])
+                calories = 3.5 * 7 * weight * duration / 200
+                print(calories)
+
+                sql_query = """UPDATE user_logindetails SET short_head_biceps=%s WHERE login=%s and username=%s"""
+                cur.execute(sql_query, (calories, login_date_time, name))
+                conn.commit()
+                conn.close()
                 break
             # emitting frame as bytes into html page
             emit("capture_2", video)
@@ -374,11 +409,16 @@ def thanks():
 
 @socketio.on('light_squat')
 def squat(data):
+    global name, login_date_time
+    print(name)
+    print(login_date_time)
     print(data)
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://127.0.0.1:7001")
-    cap = cv2.VideoCapture("http://192.168.29.172:8080/video")  # "http://192.168.29.149:8080/video"
+    cap = cv2.VideoCapture("static/sample_videos/squat.mp4")  # "http://192.168.29.149:8080/video"
+    start_time=datetime.now()
+    cur, conn = connections()
     while cap.isOpened():
         try:
             ret, im0 = cap.read()
@@ -394,7 +434,20 @@ def squat(data):
             message = socket.recv_pyobj()
             counter = message["counter"]
             video = {"base_64": message["image_data"]}
-            if counter == 3:
+            if counter == 2:
+                end_time = datetime.now()
+                diff = end_time - start_time
+                duration = diff.total_seconds() / 60
+                sql_query = """select weight from details WHERE username=%s"""
+                cur.execute(sql_query, (name,))
+                weight = int(cur.fetchone()[0])
+                calories = 3.5 * 5 * weight * duration / 200
+                print(calories)
+
+                sql_query = """UPDATE user_logindetails SET squats=%s WHERE login=%s and username=%s"""
+                cur.execute(sql_query, (calories, login_date_time, name))
+                conn.commit()
+                conn.close()
                 break
             # emitting frame as bytes into html page
             emit("capture_2", video)
@@ -411,7 +464,9 @@ def medium_squat(data):
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://127.0.0.1:7001")
-    cap = cv2.VideoCapture("http://192.168.29.172:8080/video")
+    cap = cv2.VideoCapture("static/sample_videos/squat.mp4") # http://192.168.29.149:8080/video
+    start_time = datetime.now()
+    cur, conn = connections()
     while cap.isOpened():
         try:
             ret, im0 = cap.read()
@@ -427,6 +482,19 @@ def medium_squat(data):
             counter = message["counter"]
             video = {"base_64": message["image_data"]}
             if counter == 3:
+                end_time = datetime.now()
+                diff = end_time - start_time
+                duration = diff.total_seconds() / 60
+                sql_query = """select weight from details WHERE username=%s"""
+                cur.execute(sql_query, (name,))
+                weight = int(cur.fetchone()[0])
+                calories = 3.5 * 5 * weight * duration / 200
+                print(calories)
+
+                sql_query = """UPDATE user_logindetails SET squats=%s WHERE login=%s and username=%s"""
+                cur.execute(sql_query, (calories, login_date_time, name))
+                conn.commit()
+                conn.close()
                 break
             # emitting frame as bytes into html page
             emit("capture_2", video)
@@ -443,7 +511,9 @@ def medium_pushup(data):
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://127.0.0.1:7002")
-    cap = cv2.VideoCapture("http://192.168.29.172:8080/video")
+    cap = cv2.VideoCapture("static/sample_videos/pushup.mp4")  #http://192.168.29.149:8080/video
+    start_time = datetime.now()
+    cur, conn = connections()
     while cap.isOpened():
         try:
             ret, im0 = cap.read()
@@ -460,6 +530,18 @@ def medium_pushup(data):
             counter = message["counter"]
             video = {"base_64": message["image_data"]}
             if counter == 3:
+                end_time = datetime.now()
+                diff = end_time - start_time
+                duration = diff.total_seconds() / 60
+                sql_query = """select weight from details WHERE username=%s"""
+                cur.execute(sql_query, (name,))
+                weight = int(cur.fetchone()[0])
+                calories = 3.5 * 5 * weight * duration / 200
+                print(calories)
+                sql_query = """UPDATE user_logindetails SET pushup=%s WHERE login=%s and username=%s"""
+                cur.execute(sql_query, (calories, login_date_time, name))
+                conn.commit()
+                conn.close()
                 break
             # emitting frame as bytes into html page
             emit("capture_2", video)
@@ -476,7 +558,9 @@ def heavy_pushup(data):
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://127.0.0.1:7002")
-    cap = cv2.VideoCapture("http://192.168.29.172:8080/video")
+    cap = cv2.VideoCapture("static/sample_videos/pushup.mp4")  #"http://192.168.29.149:8080/video"
+    start_time = datetime.now()
+    cur, conn = connections()
     while cap.isOpened():
         try:
             ret, im0 = cap.read()
@@ -491,7 +575,19 @@ def heavy_pushup(data):
             message = socket.recv_pyobj()
             counter = message["counter"]
             video = {"base_64": message["image_data"]}
-            if counter == 2:
+            if counter == 3:
+                end_time = datetime.now()
+                diff = end_time - start_time
+                duration = diff.total_seconds() / 60
+                sql_query = """select weight from details WHERE username=%s"""
+                cur.execute(sql_query, (name,))
+                weight = int(cur.fetchone()[0])
+                calories = 3.5 * 5 * weight * duration / 200
+                print(calories)
+                sql_query = """UPDATE user_logindetails SET pushup=%s WHERE login=%s and username=%s"""
+                cur.execute(sql_query, (calories, login_date_time, name))
+                conn.commit()
+                conn.close()
                 break
             # emitting frame as bytes into html page
             emit("capture_2", video)
@@ -522,9 +618,15 @@ def chart1():
           from user_logindetails''', conn)
     df = pd.DataFrame(SQL_Query,
                       columns=['id', 'username', 'login', 'pushup', 'biceps', 'squats', 'lunges', "short_head_biceps"])
+    print(df.info())
+    df['login'] = pd.to_datetime(df['login'], infer_datetime_format=True)
+    df.set_index(keys=['login'], inplace=True)
+    df.index = df.index.tz_convert('Asia/Kolkata')
+    df.sort_index(ascending=True,inplace=True)
+    df.reset_index(drop=False, inplace=True)
     print(df)
     print('The data type of df is: ', type(df))
-    fig = px.line(df, x="login", y="biceps", color="username")
+    fig = px.line(df, x="login", y=["biceps","squats","lunges","short_head_biceps"])
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     header = "Calories"
     description = """
